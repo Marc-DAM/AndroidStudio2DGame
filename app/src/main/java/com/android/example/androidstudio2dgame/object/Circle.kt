@@ -1,4 +1,4 @@
-package com.android.example.androidstudio2dgame
+package com.android.example.androidstudio2dgame.`object`
 
 import android.content.Context
 import android.graphics.Canvas

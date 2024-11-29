@@ -9,6 +9,8 @@ abstract class GameObject(
     protected var positionX: Double,
     protected var positionY: Double,
 ) {
+    protected var directionX: Double = 1.0
+    protected var directionY: Double = 0.0
     protected var velocityX: Double = 0.0
     protected var velocityY: Double = 0.0
 
@@ -31,5 +33,12 @@ abstract class GameObject(
         }
     }
 
+    fun retrieveDirectionX(): Double {
+        return directionX
+    }
+
+    fun retrieveDirectionY(): Double {
+        return directionY
+    }
 }
 

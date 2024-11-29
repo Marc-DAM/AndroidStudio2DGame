@@ -66,10 +66,9 @@ class Joystick(
     }
 
     fun isPressed(touchPositionX: Double, touchPositionY: Double): Boolean {
-        joystickCenterToTouchDistance = Math.sqrt(
-            Math.pow((outerCircleCenterPositionX - touchPositionX), 2.0) +
-                    Math.pow((outerCircleCenterPositionY - touchPositionY), 2.0)
-        )
+        joystickCenterToTouchDistance = Utils.getDistanceBetweenPoints(
+            outerCircleCenterPositionX.toDouble(),
+            outerCircleCenterPositionY.toDouble(), touchPositionX, touchPositionY)
 
         // Verificar si la distancia es menor al radio del círculo exterior
         return joystickCenterToTouchDistance < outerCircleRadius
@@ -89,7 +88,7 @@ class Joystick(
         val deltaY = touchPositionY - outerCircleCenterPositionY
 
         // Calcular la distancia entre el toque y el centro del joystick
-        val deltaDistance = Math.sqrt(Math.pow(deltaX, 2.0) + Math.pow(deltaY, 2.0))
+        val deltaDistance = Utils.getDistanceBetweenPoints(0.0,0.0,deltaX,deltaY,)
 
         // Verificar si el toque está dentro del radio del círculo exterior
         if (deltaDistance < outerCircleRadius) {

@@ -21,6 +21,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private val enemyList: MutableList<Enemy> = mutableListOf()
     private val spellList: MutableList<Spell> = mutableListOf()
     private var joystickPointerId: Int = 0
+    private var numberOfSpellsToCast: Int = 0
 
 
     init {
@@ -45,14 +46,14 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
             MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_DOWN  -> {
                 if (joystick.getIsPressed()) {
                     // Joystick already pressed before this event -> cast spell
-                    spellList.add(Spell(context, player))
+                    numberOfSpellsToCast++
                 } else if (joystick.isPressed(event.x.toDouble(), event.y.toDouble())) {
                     // Joystick is pressed in this event -> setIsPressed(true) and store ID
                     joystickPointerId = event.getPointerId(event.actionIndex)
                     joystick.setIsPressed(true) // Marca que el joystick está presionado
                 } else {
                     // Joystick was not previously, and is not pressed in this event -> cast spell
-                    spellList.add(Spell(context, player))
+                    numberOfSpellsToCast++
                 }
                 return true
 
@@ -142,12 +143,18 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
             enemyList.add(Enemy(getContext(), player))
         }
 
+        while (numberOfSpellsToCast > 0) {
+            spellList.add(Spell(context, player))
+            numberOfSpellsToCast--
+        }
+
         // Update state of each enemy
         for (enemy in enemyList) {
             enemy.update()
         }
 
         // Update state of each spell
+
         for (spell in spellList) {
             spell.update()
         }

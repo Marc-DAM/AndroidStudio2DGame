@@ -5,12 +5,14 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
+import com.android.example.androidstudio2dgame.Joystick
 import com.android.example.androidstudio2dgame.Player
 import com.android.example.androidstudio2dgame.R
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
+    private val joystick: Joystick
     private val player: Player
     private val gameLoop: GameLoop
 
@@ -21,6 +23,9 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         // Inicializar GameLoop
         gameLoop = GameLoop(this, surfaceHolder)
+
+        //Inicializar joystick
+        joystick = Joystick(275,700,70,40)
 
         //Inicializar jugador
         player = Player(getContext(), 500.0,500.0,30.0)
@@ -33,14 +38,25 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         // Manejar las acciones del evento táctil
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                // Cambiar la posición del jugador cuando se toca la pantalla
-                player.setPosition(event.x.toDouble(), event.y.toDouble())
-                return true  // Indicar que el evento se ha manejado correctamente
+                // Verifica si el toque está dentro del área del joystick
+                if (joystick.isPressed(event.x.toDouble(), event.y.toDouble())) {
+                    joystick.setIsPressed(true) // Marca que el joystick está presionado
+                }
+                return true
+
             }
             MotionEvent.ACTION_MOVE -> {
-                // Cambiar la posición del jugador cuando se mueve la pantalla
-                player.setPosition(event.x.toDouble(), event.y.toDouble())
-                return true  // Indicar que el evento se ha manejado correctamente
+                // Si el joystick está presionado, actualiza su estado (movimiento)
+                if (joystick.getIsPressed()) {
+                    joystick.setActuator(event.x.toDouble(), event.y.toDouble()) // Actualiza la posición del actuador
+                }
+                return true
+            }
+            MotionEvent.ACTION_UP -> {
+                // Cuando el dedo se levanta, puedes marcar que el joystick ha sido soltado si es necesario
+                joystick.setIsPressed(false)
+                joystick.resetActuator()
+                return true
             }
         }
 
@@ -64,6 +80,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         drawUPS(canvas)
         drawFPS(canvas)
 
+        joystick.draw(canvas)
         player.draw(canvas)
     }
 
@@ -92,6 +109,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     }
 
     fun update(){
-        player.update()
+        joystick.update()
+        player.update(joystick)
     }
 }

@@ -7,8 +7,8 @@ import android.view.SurfaceHolder
 
 class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder) : Thread() {
 
-    private companion object {
-        private const val MAX_UPS = 30.0
+     companion object {
+        const val MAX_UPS = 30.0
         private const val UPS_PERIOD = 1000.0 / MAX_UPS
     }
 

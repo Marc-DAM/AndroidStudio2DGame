@@ -9,14 +9,16 @@ import com.android.example.androidstudio2dgame.`object`.Enemy
 import com.android.example.androidstudio2dgame.Joystick
 import com.android.example.androidstudio2dgame.`object`.Player
 import com.android.example.androidstudio2dgame.R
+import com.android.example.androidstudio2dgame.`object`.Circle
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     private val joystick: Joystick
     private val player: Player
-    private val enemy: Enemy
+    //private val enemy: Enemy
     private val gameLoop: GameLoop
+    private val enemyList: MutableList<Enemy> = mutableListOf()
 
     init {
         // Obtener SurfaceHolder y añadir el callback
@@ -29,7 +31,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         //Inicializar objetos del juego
         joystick = Joystick(275,700,70,40)
         player = Player(getContext(), joystick ,500.0,500.0,30.0)
-        enemy = Enemy(getContext(), player, 500.0,200.0,30.0)
+        //enemy = Enemy(getContext(), player, 500.0,200.0,30.0)
 
         // Hacer que la vista sea focalizable
         isFocusable = true
@@ -83,7 +85,9 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         joystick.draw(canvas)
         player.draw(canvas)
-        enemy.draw(canvas)
+        for(enemy in enemyList){
+            enemy.draw(canvas)
+        }
     }
 
     private fun drawUPS(canvas: Canvas) {
@@ -113,6 +117,25 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     fun update(){
         joystick.update()
         player.update()
-        enemy.update()
+
+        // Spawn enemy if is time to spawn new enemies
+        if(Enemy.readyToSpawn()){
+            enemyList.add(Enemy(getContext(), player))
+        }
+
+        // Update state of each enemy
+        for(enemy in enemyList){
+            enemy.update()
+        }
+
+        // Iterate through enemyList and check for collision between each enemy and the player
+        val iteratorEnemy = enemyList.iterator()
+        while (iteratorEnemy.hasNext()) {
+            val enemy = iteratorEnemy.next()
+            if (Circle.isColliding(enemy, player)) {
+                // Remove enemy if it collides with the player
+                iteratorEnemy.remove()
+            }
+        }
     }
 }

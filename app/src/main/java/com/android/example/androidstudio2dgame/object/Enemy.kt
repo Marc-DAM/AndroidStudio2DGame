@@ -22,9 +22,38 @@ class Enemy(
     positionY,
     radius
 ) {
+    constructor(context: Context, player: Player) : this(
+        context,
+        player,
+        positionX = Math.random() * 1000,
+        positionY = Math.random() * 1000,
+        radius = 30.0
+    )
+
     companion object {
+
         private const val SPEED_PIXELS_PER_SECOND = Player.SPEED_PIXELS_PER_SECOND *0.6
         private const val MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS
+        private const val SPAWNS_PER_MINUTE = 20.0
+        private const val SPAWNS_PER_SECOND = SPAWNS_PER_MINUTE/60.0
+        private const val UPDATES_PER_SPAWN = GameLoop.MAX_UPS/SPAWNS_PER_SECOND
+        private var updatesUntilNextSpawn = UPDATES_PER_SPAWN
+
+        /**
+         * readyToSpawn checks if a new enemy should spawn, according to the decided number of spawns
+         * per minute (see SPAWNS_PER_MINUTE at top)
+         * @return true if ready to spawn, false otherwise
+         */
+        fun readyToSpawn(): Boolean {
+            if (updatesUntilNextSpawn <= 0) {
+                updatesUntilNextSpawn += UPDATES_PER_SPAWN
+                return true
+            } else {
+                updatesUntilNextSpawn--
+                return false
+            }
+        }
+
     }
 
     override fun update() {

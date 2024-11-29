@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.android.example.androidstudio2dgame"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.android.example.androidstudio2dgame"

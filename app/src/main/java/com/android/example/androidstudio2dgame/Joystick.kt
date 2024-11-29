@@ -36,7 +36,7 @@ class Joystick(
         }
 
         innerCirclePaint.apply {
-            color = Color.BLUE
+            color = Color.LTGRAY
             style = Paint.Style.FILL_AND_STROKE
         }
     }

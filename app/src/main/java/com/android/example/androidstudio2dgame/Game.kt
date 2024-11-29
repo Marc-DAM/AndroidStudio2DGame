@@ -5,6 +5,7 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
+import com.android.example.androidstudio2dgame.Enemy
 import com.android.example.androidstudio2dgame.Joystick
 import com.android.example.androidstudio2dgame.Player
 import com.android.example.androidstudio2dgame.R
@@ -14,6 +15,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     private val joystick: Joystick
     private val player: Player
+    private val enemy: Enemy
     private val gameLoop: GameLoop
 
     init {
@@ -24,11 +26,10 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         // Inicializar GameLoop
         gameLoop = GameLoop(this, surfaceHolder)
 
-        //Inicializar joystick
+        //Inicializar objetos del juego
         joystick = Joystick(275,700,70,40)
-
-        //Inicializar jugador
-        player = Player(getContext(), 500.0,500.0,30.0)
+        player = Player(getContext(), joystick ,500.0,500.0,30.0)
+        enemy = Enemy()
 
         // Hacer que la vista sea focalizable
         isFocusable = true
@@ -110,6 +111,6 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     fun update(){
         joystick.update()
-        player.update(joystick)
+        player.update()
     }
 }

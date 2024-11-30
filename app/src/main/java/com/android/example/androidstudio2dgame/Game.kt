@@ -48,7 +48,8 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         joystick = Joystick(275, 700, 70, 40)
 
         //Inicializar objetos del juego
-        player = Player(getContext(), joystick, 500.0, 500.0, 30.0)
+        val spriteSheet = SpriteSheet(context)
+        player = Player(getContext(), joystick, 500.0, 500.0, 32.0, spriteSheet.getPlayerSprite())
 
         // Initialize game display and center it around the player
         val displayMetrics = DisplayMetrics()

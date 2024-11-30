@@ -8,6 +8,7 @@ import com.android.example.androidstudio2dgame.gamepanel.Joystick
 import com.android.example.androidstudio2dgame.R
 import com.android.example.androidstudio2dgame.Utils
 import com.android.example.androidstudio2dgame.gamepanel.HealthBar
+import com.android.example.androidstudio2dgame.graphics.Sprite
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
 /**
@@ -20,7 +21,8 @@ class Player(
     private val joystick: Joystick,
     positionX: Double,
     positionY: Double,
-    radius: Double
+    radius: Double,
+    private val sprite: Sprite
 ) : Circle(context, ContextCompat.getColor(context, R.color.player), positionX, positionY, radius) {
 
     companion object {
@@ -37,7 +39,11 @@ class Player(
     // El mateix per els arguments de player: haurien d'estar heredats?
     //==================================
     override fun draw(canvas: Canvas, gameDisplay: GameDisplay) {
-        super.draw(canvas, gameDisplay)
+        sprite.draw(
+            canvas,
+            gameDisplay.gameToDisplayCoordinatesX(retrievePositionX()).toInt() - sprite.getWidth()/2,
+            gameDisplay.gameToDisplayCoordinatesY(retrievePositionY()).toInt() - sprite.getHeight()/2
+        )
         healthBar.draw(canvas, gameDisplay)
     }
 

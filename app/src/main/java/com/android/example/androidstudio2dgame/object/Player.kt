@@ -3,9 +3,10 @@ package com.android.example.androidstudio2dgame.`object`
 import android.content.Context
 import android.graphics.Canvas
 import androidx.core.content.ContextCompat
-import com.android.example.androidstudio2dgame.Joystick
+import com.android.example.androidstudio2dgame.gamepanel.Joystick
 import com.android.example.androidstudio2dgame.R
 import com.android.example.androidstudio2dgame.Utils
+import com.android.example.androidstudio2dgame.gamepanel.HealthBar
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
 /**

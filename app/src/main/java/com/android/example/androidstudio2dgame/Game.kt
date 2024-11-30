@@ -5,13 +5,14 @@ import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
+import com.android.example.androidstudio2dgame.gamepanel.Performance
 import com.android.example.androidstudio2dgame.`object`.Enemy
-import com.android.example.androidstudio2dgame.Joystick
+import com.android.example.androidstudio2dgame.gamepanel.Joystick
 import com.android.example.androidstudio2dgame.`object`.Player
 import com.android.example.androidstudio2dgame.R
 import com.android.example.androidstudio2dgame.`object`.Spell
 import com.android.example.androidstudio2dgame.`object`.Circle
-import com.android.example.androidstudio2dgame.`object`.HealthBar
+import com.android.example.androidstudio2dgame.gamepanel.GameOver
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
@@ -23,6 +24,8 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private val spellList: MutableList<Spell> = mutableListOf()
     private var joystickPointerId: Int = 0
     private var numberOfSpellsToCast: Int = 0
+    private val gameOver: GameOver
+    private val performance: Performance
 
 
     init {
@@ -33,8 +36,12 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         // Inicializar GameLoop
         gameLoop = GameLoop(this, surfaceHolder)
 
-        //Inicializar objetos del juego
+        // Initialize game panels
+        performance = Performance(getContext(), gameLoop)
+        gameOver = GameOver(getContext())
         joystick = Joystick(275, 700, 70, 40)
+
+        //Inicializar objetos del juego
         player = Player(getContext(), joystick, 500.0, 500.0, 30.0)
 
         // Hacer que la vista sea focalizable
@@ -98,10 +105,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-        drawUPS(canvas)
-        drawFPS(canvas)
 
-        joystick.draw(canvas)
         player.draw(canvas)
         for (enemy in enemyList) {
             enemy.draw(canvas)
@@ -109,33 +113,25 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         for (spell in spellList) {
             spell.draw(canvas)
         }
-    }
 
-    private fun drawUPS(canvas: Canvas) {
-        val averageUPS = gameLoop.getAverageUPS().toString()
+        // Draw game panels
+        joystick.draw(canvas)
+        performance.draw(canvas)
 
-        val paint = Paint().apply {
-            color = ContextCompat.getColor(context, R.color.magenta)
-            textSize = 50f
-            isAntiAlias = true
+        // Draw Game Over if the player is dead
+        if (player.retrieveHealthPoints() <= 0) {
+            gameOver.draw(canvas)
         }
-
-        canvas.drawText("UPS: $averageUPS", 100f, 100f, paint)
-    }
-
-    private fun drawFPS(canvas: Canvas) {
-        val averageFPS = gameLoop.getAverageFPS().toString()
-
-        val paint = Paint().apply {
-            color = ContextCompat.getColor(context, R.color.magenta)
-            textSize = 50f
-            isAntiAlias = true
-        }
-
-        canvas.drawText("FPS: $averageFPS", 100f, 200f, paint)
     }
 
     fun update() {
+
+        // Stop updating the game if the player is dead
+        if ( player.retrieveHealthPoints() <= 0) {
+            return
+        }
+
+
         joystick.update()
         player.update()
 

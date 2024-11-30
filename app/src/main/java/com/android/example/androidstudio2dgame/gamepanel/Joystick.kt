@@ -1,8 +1,9 @@
-package com.android.example.androidstudio2dgame
+package com.android.example.androidstudio2dgame.gamepanel
 
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import com.android.example.androidstudio2dgame.Utils
 
 class Joystick(
     centerPositionX: Int,
@@ -68,7 +69,8 @@ class Joystick(
     fun isPressed(touchPositionX: Double, touchPositionY: Double): Boolean {
         joystickCenterToTouchDistance = Utils.getDistanceBetweenPoints(
             outerCircleCenterPositionX.toDouble(),
-            outerCircleCenterPositionY.toDouble(), touchPositionX, touchPositionY)
+            outerCircleCenterPositionY.toDouble(), touchPositionX, touchPositionY
+        )
 
         // Verificar si la distancia es menor al radio del círculo exterior
         return joystickCenterToTouchDistance < outerCircleRadius
@@ -88,7 +90,7 @@ class Joystick(
         val deltaY = touchPositionY - outerCircleCenterPositionY
 
         // Calcular la distancia entre el toque y el centro del joystick
-        val deltaDistance = Utils.getDistanceBetweenPoints(0.0,0.0,deltaX,deltaY,)
+        val deltaDistance = Utils.getDistanceBetweenPoints(0.0, 0.0, deltaX, deltaY,)
 
         // Verificar si el toque está dentro del radio del círculo exterior
         if (deltaDistance < outerCircleRadius) {

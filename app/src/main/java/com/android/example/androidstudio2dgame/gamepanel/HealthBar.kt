@@ -1,10 +1,11 @@
-package com.android.example.androidstudio2dgame.`object`
+package com.android.example.androidstudio2dgame.gamepanel
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import androidx.core.content.ContextCompat
 import com.android.example.androidstudio2dgame.R
+import com.android.example.androidstudio2dgame.`object`.Player
 
 /**
  *  HealthBar displays the players health to the screen

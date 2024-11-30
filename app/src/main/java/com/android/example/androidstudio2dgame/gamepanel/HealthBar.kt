@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import androidx.core.content.ContextCompat
+import com.android.example.androidstudio2dgame.GameDisplay
 import com.android.example.androidstudio2dgame.R
 import com.android.example.androidstudio2dgame.`object`.Player
 
@@ -25,7 +26,7 @@ class HealthBar(private val context: Context, private val player: Player) {
         style = Paint.Style.FILL
     }
 
-    fun draw(canvas: Canvas) {
+    fun draw(canvas: Canvas, gameDisplay: GameDisplay) {
         val x = player.retrievePositionX()
         val y = player.retrievePositionY()
         val distanceToPlayer = 30
@@ -36,7 +37,13 @@ class HealthBar(private val context: Context, private val player: Player) {
         val borderRight = (x + width / 2).toFloat()
         val borderBottom = (y - distanceToPlayer).toFloat()
         val borderTop = borderBottom - height
-        canvas.drawRect(borderLeft, borderTop, borderRight, borderBottom, borderPaint)
+        canvas.drawRect(
+            gameDisplay.gameToDisplayCoordinatesX(borderLeft.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesY(borderTop.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesX(borderRight.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesY(borderBottom.toDouble()).toFloat(),
+            borderPaint
+        )
 
         // Draw health
         val healthWidth = width - 2 * margin
@@ -45,7 +52,13 @@ class HealthBar(private val context: Context, private val player: Player) {
         val healthRight = (healthLeft + healthWidth * healthPointsPercentage).toFloat()
         val healthBottom = borderBottom - margin
         val healthTop = healthBottom - healthHeight
-        canvas.drawRect(healthLeft, healthTop, healthRight, healthBottom, healthPaint)
+        canvas.drawRect(
+            gameDisplay.gameToDisplayCoordinatesX(healthLeft.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesY(healthTop.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesX(healthRight.toDouble()).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesY(healthBottom.toDouble()).toFloat(),
+            healthPaint
+        )
 
     }
 }

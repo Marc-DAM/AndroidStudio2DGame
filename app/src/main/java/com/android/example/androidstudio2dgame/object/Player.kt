@@ -3,6 +3,7 @@ package com.android.example.androidstudio2dgame.`object`
 import android.content.Context
 import android.graphics.Canvas
 import androidx.core.content.ContextCompat
+import com.android.example.androidstudio2dgame.GameDisplay
 import com.android.example.androidstudio2dgame.gamepanel.Joystick
 import com.android.example.androidstudio2dgame.R
 import com.android.example.androidstudio2dgame.Utils
@@ -35,9 +36,9 @@ class Player(
     // No hauria d'estar el drawCircle en un altre cantó?
     // El mateix per els arguments de player: haurien d'estar heredats?
     //==================================
-    override fun draw(canvas: Canvas) {
-        super.draw(canvas)
-        healthBar.draw(canvas)
+    override fun draw(canvas: Canvas, gameDisplay: GameDisplay) {
+        super.draw(canvas, gameDisplay)
+        healthBar.draw(canvas, gameDisplay)
     }
 
     override fun update() {

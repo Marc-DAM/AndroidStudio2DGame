@@ -1,6 +1,7 @@
 package com.android.example.androidstudio2dgame.`object`
 
 import android.graphics.Canvas
+import com.android.example.androidstudio2dgame.GameDisplay
 
 /**
  * GameObject is an abstract class which is the foundation of all world objects in the game.
@@ -14,7 +15,7 @@ abstract class GameObject(
     protected var velocityX: Double = 0.0
     protected var velocityY: Double = 0.0
 
-    abstract fun draw(canvas: Canvas)
+    abstract fun draw(canvas: Canvas, gameDisplay: GameDisplay)
     abstract fun update()
 
     fun retrievePositionX(): Double {

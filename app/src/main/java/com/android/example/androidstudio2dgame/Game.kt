@@ -1,11 +1,14 @@
+import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
+import com.android.example.androidstudio2dgame.GameDisplay
 import com.android.example.androidstudio2dgame.gamepanel.Performance
 import com.android.example.androidstudio2dgame.`object`.Enemy
 import com.android.example.androidstudio2dgame.gamepanel.Joystick
@@ -27,6 +30,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private var numberOfSpellsToCast: Int = 0
     private val gameOver: GameOver
     private val performance: Performance
+    private lateinit var gameDisplay: GameDisplay
 
 
     init {
@@ -37,6 +41,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         // Inicializar GameLoop
         gameLoop = GameLoop(this, surfaceHolder)
 
+
         // Initialize game panels
         performance = Performance(getContext(), gameLoop)
         gameOver = GameOver(getContext())
@@ -44,6 +49,11 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         //Inicializar objetos del juego
         player = Player(getContext(), joystick, 500.0, 500.0, 30.0)
+
+        // Initialize game display and center it around the player
+        val displayMetrics = DisplayMetrics()
+        (getContext() as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
+        gameDisplay = GameDisplay(displayMetrics.widthPixels, displayMetrics.heightPixels, player)
 
         // Hacer que la vista sea focalizable
         isFocusable = true
@@ -109,12 +119,14 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
 
-        player.draw(canvas)
+        player.draw(canvas, gameDisplay)
+
         for (enemy in enemyList) {
-            enemy.draw(canvas)
+            enemy.draw(canvas, gameDisplay)
         }
+
         for (spell in spellList) {
-            spell.draw(canvas)
+            spell.draw(canvas, gameDisplay)
         }
 
         // Draw game panels
@@ -180,6 +192,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
             }
         }
 
+        gameDisplay.update()
 
     }
 

@@ -3,6 +3,7 @@ package com.android.example.androidstudio2dgame.`object`
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import com.android.example.androidstudio2dgame.GameDisplay
 
 /**
  * Circle is an abstract class which implements a draw method from Gameobject for drawing the object
@@ -21,8 +22,12 @@ abstract class Circle(
         this.color = color
     }
 
-    override fun draw(canvas: Canvas) {
-        canvas.drawCircle(positionX.toFloat(), positionY.toFloat(), radius.toFloat(), paint)
+    override fun draw(canvas: Canvas, gameDisplay: GameDisplay) {
+        canvas.drawCircle(
+            gameDisplay.gameToDisplayCoordinatesX(positionX).toFloat(),
+            gameDisplay.gameToDisplayCoordinatesY(positionY).toFloat(),
+            radius.toFloat(),
+            paint)
     }
     //===========================================================
     // MIRAR SI ES POT IMPLEMENTAR EL MÉTODE OVERLAPS

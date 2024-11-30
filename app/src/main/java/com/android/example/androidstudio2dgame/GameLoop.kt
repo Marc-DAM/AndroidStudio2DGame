@@ -2,10 +2,14 @@ package com.example.androidstudio2dgamedevelopment
 
 import Game
 import android.graphics.Canvas
+import android.util.Log
 import android.view.SurfaceHolder
 
 
-class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder) : Thread() {
+class GameLoop(
+    private val game: Game,
+    private val surfaceHolder: SurfaceHolder
+) : Thread() {
 
      companion object {
         const val MAX_UPS = 30.0
@@ -28,13 +32,36 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
 
     // Método para iniciar el bucle del juego
     fun startLoop() {
+        Log.d("GameLoop.kt", "startLoop()")
         isRunning = true
-        start()
+        // Crea un nuevo hilo si este ya terminó o no se inició.
+        if (state == State.NEW) {
+            start() // Inicia el hilo si es nuevo
+        } else {
+            Log.w("GameLoop", "Thread cannot be restarted. Creating a new instance.")
+            // Crear un nuevo GameLoop y reiniciarlo
+            val newGameLoop = GameLoop(game, surfaceHolder)
+            game.setGameLoop(newGameLoop) // Método que actualiza la referencia en Game
+            newGameLoop.startLoop()
+        }
+    }
+
+    // Método para detener el bucle
+    fun stopLoop() {
+        if(!isRunning) return
+        Log.d("GameLoop.kt", "stopLoop()")
+        isRunning = false
+        // Wait for threat to join
+        try {
+            join()
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
     }
 
     override fun run() {
+        Log.d("GameLoop.kt", "run()")
         super.run()
-
 
         // Declare time and cycle count variables
         var updateCount = 0
@@ -77,7 +104,7 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
             // Lógica para controlar el UPS y FPS (esto se puede personalizar)
             // Por ejemplo, pausar el bucle para no exceder el UPS objetivo
             try {
-                Thread.sleep(1000 / 60) // Limitar a 60 FPS (puedes ajustar según lo necesites)
+                sleep(1000 / 60) // Limitar a 60 FPS (puedes ajustar según lo necesites)
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }
@@ -119,8 +146,5 @@ class GameLoop(private val game: Game, private val surfaceHolder: SurfaceHolder)
         }
     }
 
-    // Método para detener el bucle
-    fun stopLoop() {
-        isRunning = false
-    }
+
 }

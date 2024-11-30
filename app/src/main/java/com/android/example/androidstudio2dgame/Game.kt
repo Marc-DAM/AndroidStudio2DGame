@@ -1,6 +1,7 @@
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
@@ -19,7 +20,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     private val joystick: Joystick
     private val player: Player
-    private val gameLoop: GameLoop
+    private var gameLoop: GameLoop
     private val enemyList: MutableList<Enemy> = mutableListOf()
     private val spellList: MutableList<Spell> = mutableListOf()
     private var joystickPointerId: Int = 0
@@ -92,15 +93,17 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
+        Log.d("Game.kt", "surfaceCreated()")
         gameLoop.startLoop()
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-        // Implementa lógica si es necesario
+        Log.d("Game.kt", "surfaceChanged()")
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-        // Implementa lógica si es necesario
+        Log.d("Game.kt", "surfaceDestroyed()")
+        gameLoop.stopLoop()
     }
 
     override fun draw(canvas: Canvas) {
@@ -179,4 +182,13 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
 
     }
+
+    fun pause() {
+        gameLoop.stopLoop()
+    }
+
+    fun setGameLoop(newGameLoop: GameLoop) {
+        gameLoop = newGameLoop
+    }
+
 }

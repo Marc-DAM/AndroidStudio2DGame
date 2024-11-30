@@ -11,6 +11,7 @@ import com.android.example.androidstudio2dgame.`object`.Player
 import com.android.example.androidstudio2dgame.R
 import com.android.example.androidstudio2dgame.`object`.Spell
 import com.android.example.androidstudio2dgame.`object`.Circle
+import com.android.example.androidstudio2dgame.`object`.HealthBar
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
@@ -166,6 +167,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
             if (Circle.isColliding(enemy, player)) {
                 // Eliminar al enemigo si colisiona con el jugador
                 iteratorEnemy.remove()
+                player.settingHealthPoints(player.retrieveHealthPoints()-1.0)
                 continue
             }
             val iteratorSpell = spellList.iterator()

@@ -24,10 +24,19 @@ class Player(
     companion object {
         const val SPEED_PIXELS_PER_SECOND = 400.0
         private const val MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS
+        const val MAX_HEALTH_POINTS = 10.0
     }
 
+    var healthPoints: Double = MAX_HEALTH_POINTS
+    private val healthBar: HealthBar = HealthBar(context, this)
+
+    //==================================
+    // No hauria d'estar el drawCircle en un altre cantó?
+    // El mateix per els arguments de player: haurien d'estar heredats?
+    //==================================
     override fun draw(canvas: Canvas) {
-        canvas.drawCircle(positionX.toFloat(), positionY.toFloat(), radius.toFloat(), paint)
+        super.draw(canvas)
+        healthBar.draw(canvas)
     }
 
     override fun update() {
@@ -40,11 +49,22 @@ class Player(
         positionY += velocityY
 
         // Update direction
-        if(velocityX != 0.0 || velocityY != 0.0){
+        if (velocityX != 0.0 || velocityY != 0.0) {
             // Normalize velocity to get direction (unit vector of velocity)
             val distance: Double = Utils.getDistanceBetweenPoints(0.0, 0.0, velocityX, velocityY)
             directionX = velocityX / distance
-            directionY = velocityY / distance        }
+            directionY = velocityY / distance
+        }
 
+    }
+
+    fun retrieveHealthPoints(): Double {
+        return healthPoints
+    }
+
+    fun settingHealthPoints(healthPoints: Double) {
+        if (healthPoints >= 0) {
+            this.healthPoints = healthPoints
+        }
     }
 }

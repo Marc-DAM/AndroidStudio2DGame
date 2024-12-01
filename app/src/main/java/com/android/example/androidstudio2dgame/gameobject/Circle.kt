@@ -3,6 +3,7 @@ package com.android.example.androidstudio2dgame.gameobject
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Rect
 import com.android.example.androidstudio2dgame.GameDisplay
 
 /**
@@ -16,6 +17,7 @@ abstract class Circle(
     positionY: Double,
     protected val radius: Double
 ) : GameObject(positionX, positionY) {
+
 
     // Añadir la propiedad velocityX en Circle como open (para permitir que se sobrescriba)
     override var velocityX: Double = 0.0

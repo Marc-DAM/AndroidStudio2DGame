@@ -2,6 +2,7 @@ package com.android.example.androidstudio2dgame.gameobject
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Rect
 import androidx.core.content.ContextCompat
 import com.android.example.androidstudio2dgame.GameDisplay
 import com.android.example.androidstudio2dgame.gamepanel.Joystick
@@ -58,6 +59,17 @@ class Player(
         //Update position
         positionX += velocityX
         positionY += velocityY
+
+        var mapRect = Rect(0, 0, 3840, 3840)
+
+        positionX = positionX.coerceIn(
+            mapRect.left.toDouble() + radius,
+            mapRect.right.toDouble() - radius
+        )
+        positionY = positionY.coerceIn(
+            mapRect.top.toDouble() + radius,
+            mapRect.bottom.toDouble() - radius
+        )
 
         // Update direction
         if (velocityX != 0.0 || velocityY != 0.0) {

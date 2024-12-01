@@ -8,10 +8,22 @@ class PlayerState(private val player: Player) {
         IS_MOVING
     }
 
+    enum class Direction {
+        DOWN,   // Mirando hacia abajo (por defecto)
+        UP,     // Mirando hacia arriba
+        LEFT,   // Mirando hacia la izquierda
+        RIGHT   // Mirando hacia la derecha
+    }
+
     private var state: State = State.NOT_MOVING
+    private var direction: Direction = Direction.DOWN // Dirección inicial predeterminada
 
     fun getState(): State {
         return state
+    }
+
+    fun getDirection(): Direction {
+        return direction
     }
 
     fun update() {
@@ -32,7 +44,16 @@ class PlayerState(private val player: Player) {
                 }
             }
             else -> {}
-
+        }
+        // Actualizar dirección según la velocidad
+        if (player.velocityY > 0) {
+            direction = Direction.DOWN
+        } else if (player.velocityY < 0) {
+            direction = Direction.UP
+        } else if (player.velocityX > 0) {
+            direction = Direction.RIGHT
+        } else if (player.velocityX < 0) {
+            direction = Direction.LEFT
         }
     }
 }

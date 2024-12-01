@@ -5,7 +5,7 @@ import com.android.example.androidstudio2dgame.GameDisplay
 import com.android.example.androidstudio2dgame.gameobject.Player
 import com.android.example.androidstudio2dgame.gameobject.PlayerState.State
 
-class Animator(private val playerSpriteArray: ArrayList<Sprite>) {
+class Animator(private val playerSpriteMap: Map<String, ArrayList<Sprite>>) {
 
     companion object {
         private const val MAX_UPDATES_BEFORE_NEXT_MOVE_FRAME: Int = 5
@@ -13,33 +13,47 @@ class Animator(private val playerSpriteArray: ArrayList<Sprite>) {
 
     private var updatesBeforeNextMoveFrame: Int = 0
     private var idxMovingFrame: Int = 1
-    private val idxNotMovingFrame: Int = 0
-
-    fun getSprite(index: Int): Sprite {
-        return playerSpriteArray[index]
-    }
+    private var lastDirection: String = "DOWN" // Dirección inicial por defecto
 
     fun draw(canvas: Canvas, gameDisplay: GameDisplay, player: Player) {
+        val direction = determineDirection(player.velocityX, player.velocityY)
+        val spriteArray = playerSpriteMap[direction] ?: return
+
         when (player.retrievePlayerState().getState()) {
             State.NOT_MOVING -> {
-                drawFrame(canvas, gameDisplay, player, getSprite(idxNotMovingFrame))
+                // Usar el sprite "idle" (primer elemento de la lista)
+                drawFrame(canvas, gameDisplay, player, spriteArray[0])
             }
 
             State.STARTED_MOVING -> {
+                // Inicializar la animación de movimiento
                 updatesBeforeNextMoveFrame = MAX_UPDATES_BEFORE_NEXT_MOVE_FRAME
-                drawFrame(canvas, gameDisplay, player, getSprite(idxMovingFrame))
+                drawFrame(canvas, gameDisplay, player, spriteArray[idxMovingFrame])
+                lastDirection = direction
             }
 
             State.IS_MOVING -> {
                 updatesBeforeNextMoveFrame--
-                if(updatesBeforeNextMoveFrame == 0){
+                if (updatesBeforeNextMoveFrame == 0) {
                     updatesBeforeNextMoveFrame = MAX_UPDATES_BEFORE_NEXT_MOVE_FRAME
                     toggleIdxMovingFrame()
                 }
-                drawFrame(canvas, gameDisplay, player, getSprite(idxMovingFrame))
+                drawFrame(canvas, gameDisplay, player, spriteArray[idxMovingFrame])
+                lastDirection = direction
             }
 
             else -> {}
+        }
+    }
+
+    private fun determineDirection(velocityX: Double, velocityY: Double): String {
+        return when {
+            Math.abs(velocityX) > Math.abs(velocityY) -> { // Prioriza X si es mayor
+                if (velocityX > 0) "RIGHT" else "LEFT"
+            }
+            else -> { // Prioriza Y si es mayor o igual
+                if (velocityY > 0) "DOWN" else "UP"
+            }
         }
     }
 

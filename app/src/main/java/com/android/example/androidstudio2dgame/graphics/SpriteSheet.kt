@@ -20,18 +20,43 @@ class SpriteSheet(context: Context) {
         bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.sprite_sheet, bitmapOptions)
     }
 
-    fun getPlayerSpriteArray(): ArrayList<Sprite> {
-        val spriteArray = ArrayList<Sprite>()
-        spriteArray.add(Sprite( this, rect = Rect(0*64,0,1*64,64)))
-        spriteArray.add(Sprite( this, rect = Rect(1*64,6,2*64,64)))
-        spriteArray.add(Sprite( this, rect = Rect(2*64,0,3*64,64)))
-        return spriteArray
+    fun getPlayerSpriteArray(): Map<String, ArrayList<Sprite>> {
+        val spriteMap = mutableMapOf<String, ArrayList<Sprite>>()
+
+        // Sprites mirando hacia abajo (fila 1)
+        spriteMap["DOWN"] = arrayListOf(
+            Sprite(this, rect = Rect(0 * 64, 0 * 64, 1 * 64, 1 * 64)), // Idle abajo
+            Sprite(this, rect = Rect(1 * 64, 0 * 64, 2 * 64, 1 * 64)), // Movimiento 1 abajo
+            Sprite(this, rect = Rect(2 * 64, 0 * 64, 3 * 64, 1 * 64))  // Movimiento 2 abajo
+        )
+
+        // Sprites mirando hacia arriba (fila 3)
+        spriteMap["UP"] = arrayListOf(
+            Sprite(this, rect = Rect(0 * 64, 2 * 64, 1 * 64, 3 * 64)), // Idle arriba
+            Sprite(this, rect = Rect(1 * 64, 2 * 64, 2 * 64, 3 * 64)), // Movimiento 1 arriba
+            Sprite(this, rect = Rect(2 * 64, 2 * 64, 3 * 64, 3 * 64))  // Movimiento 2 arriba
+        )
+
+        // Sprites mirando hacia la derecha (fila 4)
+        spriteMap["RIGHT"] = arrayListOf(
+            Sprite(this, rect = Rect(0 * 64, 3 * 64, 1 * 64, 4 * 64)), // Idle derecha
+            Sprite(this, rect = Rect(1 * 64, 3 * 64, 2 * 64, 4 * 64)), // Movimiento 1 derecha
+            Sprite(this, rect = Rect(2 * 64, 3 * 64, 3 * 64, 4 * 64))  // Movimiento 2 derecha
+        )
+
+        // Sprites mirando hacia la izquierda (fila 5)
+        spriteMap["LEFT"] = arrayListOf(
+            Sprite(this, rect = Rect(0 * 64, 4 * 64, 1 * 64, 5 * 64)), // Idle izquierda
+            Sprite(this, rect = Rect(1 * 64, 4 * 64, 2 * 64, 5 * 64)), // Movimiento 1 izquierda
+            Sprite(this, rect = Rect(2 * 64, 4 * 64, 3 * 64, 5 * 64))  // Movimiento 2 izquierda
+        )
+
+        return spriteMap
     }
 
     fun getBitmap(): Bitmap {
         return bitmap
     }
-
 
 
     private fun getSpriteByIndex(idxRow: Int, idxCol: Int): Sprite {

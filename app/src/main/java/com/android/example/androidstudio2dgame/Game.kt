@@ -1,22 +1,20 @@
 import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import androidx.core.content.ContextCompat
 import com.android.example.androidstudio2dgame.GameDisplay
 import com.android.example.androidstudio2dgame.gamepanel.Performance
 import com.android.example.androidstudio2dgame.`object`.Enemy
 import com.android.example.androidstudio2dgame.gamepanel.Joystick
 import com.android.example.androidstudio2dgame.`object`.Player
-import com.android.example.androidstudio2dgame.R
 import com.android.example.androidstudio2dgame.`object`.Spell
 import com.android.example.androidstudio2dgame.`object`.Circle
 import com.android.example.androidstudio2dgame.gamepanel.GameOver
+import com.android.example.androidstudio2dgame.graphics.Animator
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
@@ -49,7 +47,8 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         //Inicializar objetos del juego
         val spriteSheet = SpriteSheet(context)
-        player = Player(getContext(), joystick, 500.0, 500.0, 32.0, spriteSheet.getPlayerSprite())
+        val animator = Animator(spriteSheet.getPlayerSpriteArray())
+        player = Player(getContext(), joystick, 500.0, 500.0, 32.0, animator)
 
         // Initialize game display and center it around the player
         val displayMetrics = DisplayMetrics()

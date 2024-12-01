@@ -8,6 +8,7 @@ import com.android.example.androidstudio2dgame.gamepanel.Joystick
 import com.android.example.androidstudio2dgame.R
 import com.android.example.androidstudio2dgame.Utils
 import com.android.example.androidstudio2dgame.gamepanel.HealthBar
+import com.android.example.androidstudio2dgame.graphics.Animator
 import com.android.example.androidstudio2dgame.graphics.Sprite
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
@@ -22,7 +23,7 @@ class Player(
     positionX: Double,
     positionY: Double,
     radius: Double,
-    private val sprite: Sprite
+    private val animator: Animator
 ) : Circle(context, ContextCompat.getColor(context, R.color.player), positionX, positionY, radius) {
 
     companion object {
@@ -34,16 +35,19 @@ class Player(
     var healthPoints: Double = MAX_HEALTH_POINTS
     private val healthBar: HealthBar = HealthBar(context, this)
 
+    // Declarar las propiedades velocityX y velocityY
+    override var velocityX: Double = 0.0
+    override var velocityY: Double = 0.0
+
+    // Estado del jugador
+    private val playerState: PlayerState = PlayerState(this)
+
     //==================================
     // No hauria d'estar el drawCircle en un altre cantó?
     // El mateix per els arguments de player: haurien d'estar heredats?
     //==================================
     override fun draw(canvas: Canvas, gameDisplay: GameDisplay) {
-        sprite.draw(
-            canvas,
-            gameDisplay.gameToDisplayCoordinatesX(retrievePositionX()).toInt() - sprite.getWidth()/2,
-            gameDisplay.gameToDisplayCoordinatesY(retrievePositionY()).toInt() - sprite.getHeight()/2
-        )
+        animator.draw(canvas, gameDisplay, this)
         healthBar.draw(canvas, gameDisplay)
     }
 
@@ -64,6 +68,9 @@ class Player(
             directionY = velocityY / distance
         }
 
+        playerState.update()
+
+
     }
 
     fun retrieveHealthPoints(): Double {
@@ -74,5 +81,9 @@ class Player(
         if (healthPoints >= 0) {
             this.healthPoints = healthPoints
         }
+    }
+
+    fun retrievePlayerState(): PlayerState {
+        return playerState
     }
 }

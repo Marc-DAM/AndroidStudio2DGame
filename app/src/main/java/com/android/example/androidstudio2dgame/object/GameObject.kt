@@ -12,8 +12,8 @@ abstract class GameObject(
 ) {
     protected var directionX: Double = 1.0
     protected var directionY: Double = 0.0
-    protected var velocityX: Double = 0.0
-    protected var velocityY: Double = 0.0
+    open var velocityX: Double = 0.0
+    open var velocityY: Double = 0.0
 
     abstract fun draw(canvas: Canvas, gameDisplay: GameDisplay)
     abstract fun update()

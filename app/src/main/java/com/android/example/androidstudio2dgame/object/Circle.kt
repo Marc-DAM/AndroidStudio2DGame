@@ -17,6 +17,10 @@ abstract class Circle(
     protected val radius: Double
 ) : GameObject(positionX, positionY) {
 
+    // Añadir la propiedad velocityX en Circle como open (para permitir que se sobrescriba)
+    override var velocityX: Double = 0.0
+    override var velocityY: Double = 0.0
+
     // Set colors of circle
     protected val paint: Paint = Paint().apply {
         this.color = color

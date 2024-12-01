@@ -15,8 +15,12 @@ class SpriteSheet(context: Context) {
         bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.sprite_sheet, bitmapOptions)
     }
 
-    fun getPlayerSprite(): Sprite {
-        return Sprite( this, rect = Rect(0,0,64,64))
+    fun getPlayerSpriteArray(): ArrayList<Sprite> {
+        val spriteArray = ArrayList<Sprite>()
+        spriteArray.add(Sprite( this, rect = Rect(0*64,0,1*64,64)))
+        spriteArray.add(Sprite( this, rect = Rect(1*64,6,2*64,64)))
+        spriteArray.add(Sprite( this, rect = Rect(2*64,0,3*64,64)))
+        return spriteArray
     }
 
     fun getBitmap(): Bitmap {

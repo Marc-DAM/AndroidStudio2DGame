@@ -1,13 +1,17 @@
 package com.android.example.androidstudio2dgame.gameobject
 
 import android.content.Context
+import android.graphics.Canvas
 import androidx.core.content.ContextCompat
+import com.android.example.androidstudio2dgame.GameDisplay
 import com.android.example.androidstudio2dgame.R
+import com.android.example.androidstudio2dgame.graphics.Animator
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
 class Spell(
     context: Context,
-    private val spellcaster: Player
+    private val spellcaster: Player,
+    private val animator: Animator
 ) : Circle(
     context,
     ContextCompat.getColor(context, R.color.spell),
@@ -30,5 +34,9 @@ class Spell(
         positionX += velocityX
         positionY += velocityY
 
+    }
+
+    override fun draw(canvas: Canvas, gameDisplay: GameDisplay) {
+        animator.draw(canvas, gameDisplay, this)
     }
 }

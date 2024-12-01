@@ -4,8 +4,9 @@ import android.graphics.Canvas
 import com.android.example.androidstudio2dgame.GameDisplay
 import com.android.example.androidstudio2dgame.gameobject.Player
 import com.android.example.androidstudio2dgame.gameobject.PlayerState.State
+import com.android.example.androidstudio2dgame.gameobject.Spell
 
-class Animator(private val playerSpriteMap: Map<String, ArrayList<Sprite>>) {
+class Animator(private val spriteMap: Map<String, ArrayList<Sprite>>) {
 
     companion object {
         private const val MAX_UPDATES_BEFORE_NEXT_MOVE_FRAME: Int = 5
@@ -17,7 +18,7 @@ class Animator(private val playerSpriteMap: Map<String, ArrayList<Sprite>>) {
 
     fun draw(canvas: Canvas, gameDisplay: GameDisplay, player: Player) {
         val direction = determineDirection(player.velocityX, player.velocityY)
-        val spriteArray = playerSpriteMap[direction] ?: return
+        val spriteArray = spriteMap[direction] ?: return
 
         when (player.retrievePlayerState().getState()) {
             State.NOT_MOVING -> {
@@ -46,11 +47,28 @@ class Animator(private val playerSpriteMap: Map<String, ArrayList<Sprite>>) {
         }
     }
 
+    fun draw(canvas: Canvas, gameDisplay: GameDisplay, spell: Spell) {
+        val spellSprites = spriteMap["DEFAULT"] ?: return
+
+        // Alternar entre dos sprites para el hechizo
+        updatesBeforeNextMoveFrame--
+        if (updatesBeforeNextMoveFrame <= 0) {
+            updatesBeforeNextMoveFrame = MAX_UPDATES_BEFORE_NEXT_MOVE_FRAME
+            toggleIdxSpellFrame() // Alterna entre los sprites
+        }
+
+        // Dibuja el hechizo usando el sprite correspondiente
+        drawFrame(canvas, gameDisplay, spell, spellSprites[idxMovingFrame])
+
+    }
+
+
     private fun determineDirection(velocityX: Double, velocityY: Double): String {
         return when {
             Math.abs(velocityX) > Math.abs(velocityY) -> { // Prioriza X si es mayor
                 if (velocityX > 0) "RIGHT" else "LEFT"
             }
+
             else -> { // Prioriza Y si es mayor o igual
                 if (velocityY > 0) "DOWN" else "UP"
             }
@@ -58,10 +76,18 @@ class Animator(private val playerSpriteMap: Map<String, ArrayList<Sprite>>) {
     }
 
     private fun toggleIdxMovingFrame() {
-        if(idxMovingFrame == 1) {
+        if (idxMovingFrame == 1) {
             idxMovingFrame = 2
         } else {
             idxMovingFrame = 1
+        }
+    }
+
+    private fun toggleIdxSpellFrame() {
+        if (idxMovingFrame == 0) {
+            idxMovingFrame = 1
+        } else {
+            idxMovingFrame = 0
         }
     }
 
@@ -71,6 +97,15 @@ class Animator(private val playerSpriteMap: Map<String, ArrayList<Sprite>>) {
             gameDisplay.gameToDisplayCoordinatesX(player.retrievePositionX())
                 .toInt() - sprite.getWidth() / 2,
             gameDisplay.gameToDisplayCoordinatesY(player.retrievePositionY())
+                .toInt() - sprite.getHeight() / 2
+        )
+    }
+    fun drawFrame(canvas: Canvas, gameDisplay: GameDisplay, spell: Spell, sprite: Sprite) {
+        sprite.draw(
+            canvas,
+            gameDisplay.gameToDisplayCoordinatesX(spell.retrievePositionX())
+                .toInt() - sprite.getWidth() / 2,
+            gameDisplay.gameToDisplayCoordinatesY(spell.retrievePositionY())
                 .toInt() - sprite.getHeight() / 2
         )
     }

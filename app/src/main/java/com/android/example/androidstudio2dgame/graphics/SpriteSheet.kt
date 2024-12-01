@@ -54,6 +54,14 @@ class SpriteSheet(context: Context) {
         return spriteMap
     }
 
+    fun getSpellSpriteArray(): Map<String, ArrayList<Sprite>> {
+        val spriteArray = ArrayList<Sprite>()
+        spriteArray.add(Sprite(this, rect = Rect(3 * 64, 0, 4 * 64, 64))) // Sprite 1 del spell
+        spriteArray.add(Sprite(this, rect = Rect(4 * 64, 0, 5 * 64, 64))) // Sprite 2 del spell
+        return mapOf("DEFAULT" to spriteArray)
+
+    }
+
     fun getBitmap(): Bitmap {
         return bitmap
     }

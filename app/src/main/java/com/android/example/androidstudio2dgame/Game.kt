@@ -22,6 +22,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     private val joystick: Joystick
     private val player: Player
+    private val spell: Spell
     private var gameLoop: GameLoop
     private val enemyList: MutableList<Enemy> = mutableListOf()
     private val spellList: MutableList<Spell> = mutableListOf()
@@ -31,6 +32,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private val performance: Performance
     private lateinit var gameDisplay: GameDisplay
     private lateinit var tilemap: Tilemap
+    private lateinit var spellAnimator: Animator
 
 
     init {
@@ -49,8 +51,10 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         //Inicializar objetos del juego
         val spriteSheet = SpriteSheet(context)
-        val animator = Animator(spriteSheet.getPlayerSpriteArray())
-        player = Player(getContext(), joystick, 500.0, 500.0, 32.0, animator)
+        val playerAnimator = Animator(spriteSheet.getPlayerSpriteArray())
+        spellAnimator = Animator(spriteSheet.getSpellSpriteArray())
+        player = Player(getContext(), joystick, 500.0, 500.0, 32.0, playerAnimator)
+        spell = Spell(getContext(), player, spellAnimator)
 
         // Initialize game display and center it around the player
         val displayMetrics = DisplayMetrics()
@@ -164,7 +168,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         }
 
         while (numberOfSpellsToCast > 0) {
-            spellList.add(Spell(context, player))
+            spellList.add(Spell(context, player, spellAnimator))
             numberOfSpellsToCast--
         }
 

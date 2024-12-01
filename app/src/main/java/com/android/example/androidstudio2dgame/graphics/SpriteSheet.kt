@@ -7,6 +7,11 @@ import com.android.example.androidstudio2dgame.graphics.Sprite
 
 class SpriteSheet(context: Context) {
 
+    companion object {
+        private const val SPRITE_WIDTH_PIXELS = 64
+        private const val SPRITE_HEIGHT_PIXELS = 64
+    }
+
     private val bitmap: Bitmap
 
     init {
@@ -25,5 +30,33 @@ class SpriteSheet(context: Context) {
 
     fun getBitmap(): Bitmap {
         return bitmap
+    }
+
+
+
+    private fun getSpriteByIndex(idxRow: Int, idxCol: Int): Sprite {
+        return Sprite(this, Rect(
+            idxCol * SPRITE_WIDTH_PIXELS,
+            idxRow * SPRITE_HEIGHT_PIXELS,
+            (idxCol + 1) * SPRITE_WIDTH_PIXELS,
+            (idxRow + 1) * SPRITE_HEIGHT_PIXELS
+             )
+        )
+    }
+
+    fun getWaterSprite(): Sprite {
+        return getSpriteByIndex(1, 0)
+    }
+    fun getLavaSprite(): Sprite {
+        return getSpriteByIndex(1, 1)
+    }
+    fun getGroundSprite(): Sprite {
+        return getSpriteByIndex(1, 2)
+    }
+    fun getGrassSprite(): Sprite {
+        return getSpriteByIndex(1, 3)
+    }
+    fun getTreeSprite(): Sprite {
+        return getSpriteByIndex(1, 4)
     }
 }

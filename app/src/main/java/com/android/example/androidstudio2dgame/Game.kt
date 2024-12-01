@@ -8,13 +8,14 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import com.android.example.androidstudio2dgame.GameDisplay
 import com.android.example.androidstudio2dgame.gamepanel.Performance
-import com.android.example.androidstudio2dgame.`object`.Enemy
+import com.android.example.androidstudio2dgame.gameobject.Enemy
 import com.android.example.androidstudio2dgame.gamepanel.Joystick
-import com.android.example.androidstudio2dgame.`object`.Player
-import com.android.example.androidstudio2dgame.`object`.Spell
-import com.android.example.androidstudio2dgame.`object`.Circle
+import com.android.example.androidstudio2dgame.gameobject.Player
+import com.android.example.androidstudio2dgame.gameobject.Spell
+import com.android.example.androidstudio2dgame.gameobject.Circle
 import com.android.example.androidstudio2dgame.gamepanel.GameOver
 import com.android.example.androidstudio2dgame.graphics.Animator
+import com.android.example.androidstudio2dgame.map.Tilemap
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
@@ -29,6 +30,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private val gameOver: GameOver
     private val performance: Performance
     private lateinit var gameDisplay: GameDisplay
+    private lateinit var tilemap: Tilemap
 
 
     init {
@@ -54,6 +56,9 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         val displayMetrics = DisplayMetrics()
         (getContext() as Activity).windowManager.defaultDisplay.getMetrics(displayMetrics)
         gameDisplay = GameDisplay(displayMetrics.widthPixels, displayMetrics.heightPixels, player)
+
+        //Initialize Tilemap
+        tilemap = Tilemap(spriteSheet)
 
         // Hacer que la vista sea focalizable
         isFocusable = true
@@ -118,6 +123,9 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
+
+        // Draw Tilemap
+        tilemap.draw(canvas, gameDisplay)
 
         player.draw(canvas, gameDisplay)
 

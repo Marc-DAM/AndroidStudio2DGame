@@ -2,9 +2,8 @@ package com.android.example.androidstudio2dgame.graphics
 
 import android.graphics.Canvas
 import com.android.example.androidstudio2dgame.GameDisplay
-import com.android.example.androidstudio2dgame.`object`.Player
-import com.android.example.androidstudio2dgame.`object`.PlayerState
-import com.android.example.androidstudio2dgame.`object`.PlayerState.State
+import com.android.example.androidstudio2dgame.gameobject.Player
+import com.android.example.androidstudio2dgame.gameobject.PlayerState.State
 
 class Animator(private val playerSpriteArray: ArrayList<Sprite>) {
 

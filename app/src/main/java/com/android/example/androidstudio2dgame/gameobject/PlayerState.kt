@@ -1,6 +1,4 @@
-package com.android.example.androidstudio2dgame.`object`
-
-import com.android.example.androidstudio2dgame.`object`.Player
+package com.android.example.androidstudio2dgame.gameobject
 
 class PlayerState(private val player: Player) {
 

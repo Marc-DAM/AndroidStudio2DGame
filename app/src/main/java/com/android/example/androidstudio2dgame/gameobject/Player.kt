@@ -1,4 +1,4 @@
-package com.android.example.androidstudio2dgame.`object`
+package com.android.example.androidstudio2dgame.gameobject
 
 import android.content.Context
 import android.graphics.Canvas
@@ -9,7 +9,6 @@ import com.android.example.androidstudio2dgame.R
 import com.android.example.androidstudio2dgame.Utils
 import com.android.example.androidstudio2dgame.gamepanel.HealthBar
 import com.android.example.androidstudio2dgame.graphics.Animator
-import com.android.example.androidstudio2dgame.graphics.Sprite
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
 /**

@@ -6,7 +6,7 @@ import android.graphics.Paint
 import androidx.core.content.ContextCompat
 import com.android.example.androidstudio2dgame.GameDisplay
 import com.android.example.androidstudio2dgame.R
-import com.android.example.androidstudio2dgame.`object`.Player
+import com.android.example.androidstudio2dgame.gameobject.Player
 
 /**
  *  HealthBar displays the players health to the screen

@@ -6,8 +6,8 @@ import com.android.example.androidstudio2dgame.gameobject.GameObject
 public class GameDisplay(widthPixels: Int, heightPixels: Int, private val centerObject: GameObject) {
 
     val DISPLAY_RECT: Rect = Rect(0, 0, widthPixels, heightPixels)
-    private val heightPixels: Int = heightPixels
-    private val widthPixels: Int = widthPixels
+    val heightPixels: Int = heightPixels
+    val widthPixels: Int = widthPixels
     private var gameToDisplayCoordinateOffsetX: Double = 0.0
     private var gameToDisplayCoordinateOffsetY: Double = 0.0
     private var displayCenterX: Double = widthPixels / 2.0

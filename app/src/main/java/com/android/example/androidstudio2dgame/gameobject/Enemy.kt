@@ -1,8 +1,11 @@
 package com.android.example.androidstudio2dgame.gameobject
 
 import android.content.Context
+import android.graphics.Canvas
 import androidx.core.content.ContextCompat
+import com.android.example.androidstudio2dgame.GameDisplay
 import com.android.example.androidstudio2dgame.R
+import com.android.example.androidstudio2dgame.graphics.Animator
 import com.example.androidstudio2dgamedevelopment.GameLoop
 
 /**
@@ -14,7 +17,8 @@ class Enemy(
     private val player: Player,
     positionX: Double,
     positionY: Double,
-    radius: Double
+    radius: Double,
+    private val animator: Animator
 ) : Circle(
     context,
     ContextCompat.getColor(context, R.color.enemy), // Color del enemigo
@@ -22,13 +26,15 @@ class Enemy(
     positionY,
     radius
 ) {
-    constructor(context: Context, player: Player) : this(
+    constructor(context: Context, player: Player, animator: Animator) : this(
         context,
         player,
         positionX = Math.random() * 1000,
         positionY = Math.random() * 1000,
-        radius = 30.0
+        radius = 30.0,
+        animator = animator
     )
+
 
     companion object {
 
@@ -80,5 +86,9 @@ class Enemy(
         // Actualizar la posición del enemigo
         positionX += velocityX
         positionY += velocityY
+    }
+
+    override fun draw(canvas: Canvas, gameDisplay: GameDisplay) {
+        animator.draw(canvas, gameDisplay, this)
     }
 }

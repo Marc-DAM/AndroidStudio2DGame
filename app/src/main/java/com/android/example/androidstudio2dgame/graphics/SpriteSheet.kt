@@ -56,11 +56,19 @@ class SpriteSheet(context: Context) {
 
     fun getSpellSpriteArray(): Map<String, ArrayList<Sprite>> {
         val spriteArray = ArrayList<Sprite>()
-        spriteArray.add(Sprite(this, rect = Rect(3 * 64, 0, 4 * 64, 64))) // Sprite 1 del spell
-        spriteArray.add(Sprite(this, rect = Rect(4 * 64, 0, 5 * 64, 64))) // Sprite 2 del spell
+        spriteArray.add(Sprite(this, rect = Rect(3 * 64, 0, 4 * 64, 64)))
+        spriteArray.add(Sprite(this, rect = Rect(4 * 64, 0, 5 * 64, 64)))
         return mapOf("DEFAULT" to spriteArray)
 
     }
+
+    fun getEnemySpriteArray(): Map<String, ArrayList<Sprite>> {
+        val spriteArray = ArrayList<Sprite>()
+        spriteArray.add(Sprite(this, rect = Rect(3 * 64, 2 * 64, 4 * 64, 3 * 64)))
+        spriteArray.add(Sprite(this, rect = Rect(4 * 64, 2 * 64, 5 * 64, 3 * 64)))
+        return mapOf("DEFAULT" to spriteArray)
+    }
+
 
     fun getBitmap(): Bitmap {
         return bitmap

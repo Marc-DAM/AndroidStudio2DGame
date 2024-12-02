@@ -23,6 +23,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private val joystick: Joystick
     private val player: Player
     private val spell: Spell
+    private val enemy: Enemy
     private var gameLoop: GameLoop
     private val enemyList: MutableList<Enemy> = mutableListOf()
     private val spellList: MutableList<Spell> = mutableListOf()
@@ -33,6 +34,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private lateinit var gameDisplay: GameDisplay
     private lateinit var tilemap: Tilemap
     private lateinit var spellAnimator: Animator
+    private lateinit var enemyAnimator: Animator
 
 
     init {
@@ -53,8 +55,10 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         val spriteSheet = SpriteSheet(context)
         val playerAnimator = Animator(spriteSheet.getPlayerSpriteArray())
         spellAnimator = Animator(spriteSheet.getSpellSpriteArray())
+        enemyAnimator = Animator(spriteSheet.getEnemySpriteArray())
         player = Player(getContext(), joystick, 500.0, 500.0, 32.0, playerAnimator)
         spell = Spell(getContext(), player, spellAnimator)
+        enemy = Enemy(getContext(), player, enemyAnimator)
 
         // Initialize game display and center it around the player
         val displayMetrics = DisplayMetrics()
@@ -164,10 +168,11 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         // Spawn enemy if is time to spawn new enemies
         if (Enemy.readyToSpawn()) {
-            enemyList.add(Enemy(getContext(), player))
+            enemyList.add(Enemy(getContext(), player, enemyAnimator))
         }
 
-        while (numberOfSpellsToCast > 0) {
+        // Solo permitir lanzar un hechizo si hay menos de 2 hechizos en pantalla
+        while (numberOfSpellsToCast > 0 && spellList.size < 2) {
             spellList.add(Spell(context, player, spellAnimator))
             numberOfSpellsToCast--
         }
@@ -178,9 +183,23 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         }
 
         // Update state of each spell
-
         for (spell in spellList) {
             spell.update()
+        }
+
+        // Obtener los límites de la pantalla (la ventana visible centrada en el jugador)
+        val gameRect = gameDisplay.getGameRect()
+
+        // Actualiza cada hechizo y elimina los que están fuera de la pantalla
+        val iteratorSpell = spellList.iterator()
+        while (iteratorSpell.hasNext()) {
+            val spell = iteratorSpell.next()
+            spell.update()
+
+            // Verificar si el hechizo está fuera de la pantalla (fuera de los límites de gameRect)
+            if (!gameRect.contains(spell.retrievePositionX().toInt(), spell.retrievePositionY().toInt())) {
+                iteratorSpell.remove()  // Elimina el hechizo si está fuera de la pantalla
+            }
         }
 
         // Iterate through enemyList and check for collision between each enemy and the player and all spells

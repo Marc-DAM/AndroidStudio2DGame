@@ -2,6 +2,7 @@ package com.android.example.androidstudio2dgame.graphics
 
 import android.graphics.Canvas
 import com.android.example.androidstudio2dgame.GameDisplay
+import com.android.example.androidstudio2dgame.gameobject.Enemy
 import com.android.example.androidstudio2dgame.gameobject.Player
 import com.android.example.androidstudio2dgame.gameobject.PlayerState.State
 import com.android.example.androidstudio2dgame.gameobject.Spell
@@ -62,6 +63,21 @@ class Animator(private val spriteMap: Map<String, ArrayList<Sprite>>) {
 
     }
 
+    fun draw(canvas: Canvas, gameDisplay: GameDisplay, enemy: Enemy) {
+        val enemySprites = spriteMap["DEFAULT"] ?: return
+
+        // Alternar entre dos sprites para el hechizo
+        updatesBeforeNextMoveFrame--
+        if (updatesBeforeNextMoveFrame <= 0) {
+            updatesBeforeNextMoveFrame = MAX_UPDATES_BEFORE_NEXT_MOVE_FRAME
+            toggleIdxSpellFrame() // Alterna entre los sprites
+        }
+
+        // Dibuja el hechizo usando el sprite correspondiente
+        drawFrame(canvas, gameDisplay, enemy, enemySprites[idxMovingFrame])
+
+    }
+
 
     private fun determineDirection(velocityX: Double, velocityY: Double): String {
         return when {
@@ -109,5 +125,15 @@ class Animator(private val spriteMap: Map<String, ArrayList<Sprite>>) {
                 .toInt() - sprite.getHeight() / 2
         )
     }
+    fun drawFrame(canvas: Canvas, gameDisplay: GameDisplay, enemy: Enemy, sprite: Sprite) {
+        sprite.draw(
+            canvas,
+            gameDisplay.gameToDisplayCoordinatesX(enemy.retrievePositionX())
+                .toInt() - sprite.getWidth() / 2,
+            gameDisplay.gameToDisplayCoordinatesY(enemy.retrievePositionY())
+                .toInt() - sprite.getHeight() / 2
+        )
+    }
+
 
 }

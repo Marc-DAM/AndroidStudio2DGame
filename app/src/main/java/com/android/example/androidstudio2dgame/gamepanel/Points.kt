@@ -30,6 +30,6 @@ class Points(private val context: Context) {
             isAntiAlias = true
         }
 
-        canvas.drawText("Puntos: $score", x, y, paint)
+        canvas.drawText("Punts: $score", x, y, paint)
     }
 }

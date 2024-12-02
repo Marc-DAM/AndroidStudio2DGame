@@ -161,7 +161,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         // Draw game panels
         joystick.draw(canvas)
-        performance.draw(canvas)
+        //performance.draw(canvas)
         points.draw(canvas)
 
         // Draw Game Over if the player is dead

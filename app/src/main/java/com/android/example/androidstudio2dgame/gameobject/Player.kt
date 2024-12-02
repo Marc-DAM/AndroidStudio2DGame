@@ -97,4 +97,10 @@ class Player(
     fun retrievePlayerState(): PlayerState {
         return playerState
     }
+
+    fun increaseHealth(amount: Int) {
+        healthPoints = (healthPoints + amount).coerceAtMost(MAX_HEALTH_POINTS)
+    }
+
+
 }

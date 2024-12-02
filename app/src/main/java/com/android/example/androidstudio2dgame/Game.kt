@@ -13,11 +13,15 @@ import com.android.example.androidstudio2dgame.gamepanel.Joystick
 import com.android.example.androidstudio2dgame.gameobject.Player
 import com.android.example.androidstudio2dgame.gameobject.Spell
 import com.android.example.androidstudio2dgame.gameobject.Circle
+import com.android.example.androidstudio2dgame.gameobject.LifeBoost
+import com.android.example.androidstudio2dgame.gameobject.ObjectSpawner
+import com.android.example.androidstudio2dgame.gameobject.ScoreBoost
 import com.android.example.androidstudio2dgame.gamepanel.GameOver
 import com.android.example.androidstudio2dgame.gamepanel.Points
 import com.android.example.androidstudio2dgame.graphics.Animator
 import com.android.example.androidstudio2dgame.map.Tilemap
 import com.example.androidstudio2dgamedevelopment.GameLoop
+import kotlin.random.Random
 
 class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
@@ -37,6 +41,8 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private lateinit var tilemap: Tilemap
     private lateinit var spellAnimator: Animator
     private lateinit var enemyAnimator: Animator
+    private lateinit var objectSpawner: ObjectSpawner
+    private lateinit var gameObjects: MutableList<Circle>
 
 
     init {
@@ -46,7 +52,6 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         // Inicializar GameLoop
         gameLoop = GameLoop(this, surfaceHolder)
-
 
         // Initialize game panels
         performance = Performance(getContext(), gameLoop)
@@ -59,6 +64,8 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         val playerAnimator = Animator(spriteSheet.getPlayerSpriteArray())
         spellAnimator = Animator(spriteSheet.getSpellSpriteArray())
         enemyAnimator = Animator(spriteSheet.getEnemySpriteArray())
+        objectSpawner = ObjectSpawner(context)
+        gameObjects = mutableListOf()
         player = Player(getContext(), joystick, 500.0, 500.0, 32.0, playerAnimator)
         spell = Spell(getContext(), player, spellAnimator)
         enemy = Enemy(getContext(), player, enemyAnimator)
@@ -148,6 +155,10 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
             spell.draw(canvas, gameDisplay)
         }
 
+        for (gameObject in gameObjects) {
+            gameObject.draw(canvas, gameDisplay)
+        }
+
         // Draw game panels
         joystick.draw(canvas)
         performance.draw(canvas)
@@ -166,9 +177,34 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
             return
         }
 
-
         joystick.update()
         player.update()
+
+        // Generar objetos aleatorios (1% de probabilidad por frame)
+        if (Random.nextDouble() < 0.01) {
+            gameObjects.add(ObjectSpawner.spawnRandomObject(context))
+        }
+
+        // Actualizar los objetos generados y verificar colisiones con el jugador
+        val iteratorGameObjects = gameObjects.iterator()
+        while (iteratorGameObjects.hasNext()) {
+            val gameObject = iteratorGameObjects.next()
+            gameObject.update()
+
+            // Verificar colisión con el jugador
+            if (Circle.isColliding(player, gameObject)) {
+                when (gameObject) {
+                    is LifeBoost -> player.increaseHealth(20) // Define este método en Player
+                    is ScoreBoost -> points.addPoints(50)    // Usa el sistema de puntos que ya tienes
+                }
+                iteratorGameObjects.remove() // Elimina el objeto tras la colisión
+            }
+        }
+
+        // Actualizar los objetos generados
+        for (gameObject in gameObjects) {
+            gameObject.update()
+        }
 
         // Spawn enemy if is time to spawn new enemies
         if (Enemy.readyToSpawn()) {

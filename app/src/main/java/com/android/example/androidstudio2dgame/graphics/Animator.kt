@@ -23,8 +23,9 @@ class Animator(private val spriteMap: Map<String, ArrayList<Sprite>>) {
 
         when (player.retrievePlayerState().getState()) {
             State.NOT_MOVING -> {
+                val idleSpriteArray = spriteMap[lastDirection] ?: return
                 // Usar el sprite "idle" (primer elemento de la lista)
-                drawFrame(canvas, gameDisplay, player, spriteArray[0])
+                drawFrame(canvas, gameDisplay, player, idleSpriteArray[0])
             }
 
             State.STARTED_MOVING -> {

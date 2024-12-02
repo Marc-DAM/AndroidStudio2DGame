@@ -14,6 +14,7 @@ import com.android.example.androidstudio2dgame.gameobject.Player
 import com.android.example.androidstudio2dgame.gameobject.Spell
 import com.android.example.androidstudio2dgame.gameobject.Circle
 import com.android.example.androidstudio2dgame.gamepanel.GameOver
+import com.android.example.androidstudio2dgame.gamepanel.Points
 import com.android.example.androidstudio2dgame.graphics.Animator
 import com.android.example.androidstudio2dgame.map.Tilemap
 import com.example.androidstudio2dgamedevelopment.GameLoop
@@ -30,6 +31,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private var joystickPointerId: Int = 0
     private var numberOfSpellsToCast: Int = 0
     private val gameOver: GameOver
+    private val points: Points
     private val performance: Performance
     private lateinit var gameDisplay: GameDisplay
     private lateinit var tilemap: Tilemap
@@ -49,6 +51,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         // Initialize game panels
         performance = Performance(getContext(), gameLoop)
         gameOver = GameOver(getContext())
+        points = Points(getContext())
         joystick = Joystick(275, 700, 70, 40)
 
         //Inicializar objetos del juego
@@ -148,6 +151,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
         // Draw game panels
         joystick.draw(canvas)
         performance.draw(canvas)
+        points.draw(canvas)
 
         // Draw Game Over if the player is dead
         if (player.retrieveHealthPoints() <= 0) {
@@ -218,6 +222,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
                 if(Circle.isColliding(spell, enemy)){
                     iteratorSpell.remove()
                     iteratorEnemy.remove()
+                    points.addPoints(20)
                     break
                 }
             }

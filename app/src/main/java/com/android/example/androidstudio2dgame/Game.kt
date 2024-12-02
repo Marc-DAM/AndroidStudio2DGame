@@ -182,7 +182,7 @@ class Game(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
         // Generar objetos aleatorios (1% de probabilidad por frame)
         if (Random.nextDouble() < 0.01) {
-            gameObjects.add(ObjectSpawner.spawnRandomObject(context))
+            gameObjects.add(ObjectSpawner.spawnRandomObject(context, tilemap))
         }
 
         // Actualizar los objetos generados y verificar colisiones con el jugador
